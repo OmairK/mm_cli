@@ -21,7 +21,7 @@ def authenticate(token_file, scopes=DEFAULT_SCOPES):
 
     else:
         flow = InstalledAppFlow.from_client_secrets_file(
-            "client_credentials.json", scopes
+            "credentials.json", scopes
         )
         creds = flow.run_local_server()
         with open(token_file, "x") as tf:
