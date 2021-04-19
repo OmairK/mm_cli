@@ -4,10 +4,10 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 
-DEFAULT_SCOPES = ["https://www.googleapis.com/auth/gmail.readonly"]
+DEFAULT_SCOPES = ["https://www.googleapis.com/auth/gmail"]
 
 
-def authenticate(token_file, scopes=DEFAULT_SCOPES):
+def authenticate(token_file, client_credentials, scopes=DEFAULT_SCOPES):
     """
     Handles authentication workflow for accessing google apps
     """
@@ -20,9 +20,7 @@ def authenticate(token_file, scopes=DEFAULT_SCOPES):
         return creds
 
     else:
-        flow = InstalledAppFlow.from_client_secrets_file(
-            "credentials.json", scopes
-        )
+        flow = InstalledAppFlow.from_client_secrets_file(client_credentials, scopes)
         creds = flow.run_local_server()
         with open(token_file, "x") as tf:
             tf.write(creds.to_json())
