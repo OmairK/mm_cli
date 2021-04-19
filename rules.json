@@ -1,5 +1,5 @@
 {
-    "rulesRelation": "any",
+    "rulesRelation": "any | all",
     "actions": [
         {
             "action": "mark | move",
