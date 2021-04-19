@@ -1,15 +1,15 @@
 import contextlib
 from functools import wraps
 from inspect import signature
-from typing import Callable
 
+from models.base import Session
 
 # SqlAlchemy session helpers that can be used as a decorator
 
 @contextlib.contextmanager
 def create_session():
     """Contextmanager that will create and teardown a session."""
-    session = settings.Session()
+    session = Session()
     try:
         yield session
         session.commit()

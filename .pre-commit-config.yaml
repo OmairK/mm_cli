@@ -9,3 +9,4 @@ repos:
     hooks:
     - id: black
       files: main.py$|^g_client/*.py$|^config_templates/*.py$|^models/*.py
+      exclude: rules.json

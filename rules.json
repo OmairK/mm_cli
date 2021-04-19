@@ -1,0 +1,26 @@
+{
+    "rulesRelation": "any",
+    "actions": [
+        {
+            "action": "mark | move",
+            "value": "<label>"
+        },
+    ],
+    "rules": [
+        {
+            "field": "from",
+            "predicate": "EQUAL | CONTAINS | NOT EQUAL | DOES NOT CONTAIN",,
+            "value": "<email>"
+        },
+        {
+            "field": "subject",
+            "predicate": "EQUAL | CONTAINS | NOT EQUAL | DOES NOT CONTAIN",
+            "value": "<string>"
+        },
+        {
+            "field": "date",
+            "predicate": "LESS THAN DAYS | GREATER THAN DAYS | LESS THAN MONTHS | GREATER THAN MONTHS",
+            "value": "<int>"
+        }
+    ]
+}

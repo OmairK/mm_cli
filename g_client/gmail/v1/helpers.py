@@ -96,15 +96,14 @@ def perform_action(creds, rules_json):
     Performs action on the emails stored in the database.
     """
     service = build("gmail", "v1", credentials=creds)
-    # session = Session()
     query_list = []
 
     for rule in rules_json["rules"]:
         query_list.append(filter_controller(rule))
 
-    if rules_json["globalPredicate"].upper() == "ALL":
+    if rules_json["rulesRelation"].upper() == "ALL":
         mails = Query.intersect(*query_list).all()
-    elif rules_json["globalPredicate"].upper() == "ANY":
+    elif rules_json["rulesRelation"].upper() == "ANY":
         mails = Query.union(*query_list).all()
 
     add_labels, remove_labels = process_labels(rules_json["actions"])

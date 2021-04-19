@@ -22,24 +22,24 @@ def date_filter(session, rule):
     if rule['predicate'].upper() == 'LESS THAN DAYS':
         end_date = date.today()
         start_date = end_date - relativedelta(days=rule['value'])
-        q = s.query(Message).filter(
-            Message.date.between(start_date, end_date)
+        q = session.query(EMail).filter(
+            EMail.date.between(start_date, end_date)
         )
     elif rule['predicate'].upper() == 'GREATER THAN DAYS':
         filter_date = date.today() - relativedelta(days=rule['value'])
-        q = s.query(Message).filter(
-            Message.date <= filter_date
+        q = session.query(EMail).filter(
+            EMail.date <= filter_date
         )
     elif rule['predicate'].upper() == 'LESS THAN MONTHS':
         end_date = date.today()
         start_date = end_date - relativedelta(months=rule['value'])
-        q = s.query(Message).filter(
-            Message.date.between(start_date, end_date)
+        q = session.query(EMail).filter(
+            EMail.date.between(start_date, end_date)
         )
     elif rule['predicate'].upper() == 'GREATER THAN MONTHS':
         filter_date = date.today() - relativedelta(days=rule['value'])
-        q = s.query(Message).filter(
-            Message.date <= filter_date
+        q = session.query(EMail).filter(
+            EMail.date <= filter_date
         )
     return q
 
@@ -54,20 +54,20 @@ def recipient_filter(session, rule):
         - rule: rule dictionary for this field
     """
     if rule['predicate'].upper() == 'EQUAL':
-        q = s.query(Message).filter(
-            Message.sender==rule['value']
+        q = session.query(EMail).filter(
+            EMail.sender==rule['value']
         )
     elif rule['predicate'].upper() == 'CONTAINS':
-        q = s.query(Message).filter(
-            Message.sender.contains(rule['value'])
+        q = session.query(EMail).filter(
+            EMail.sender.contains(rule['value'])
         )
     elif rule['predicate'].upper() == 'NOT EQUAL':
-        q = s.query(Message).filter(
-            Message.sender!=rule['value']
+        q = session.query(EMail).filter(
+            EMail.sender!=rule['value']
         )
     elif rule['predicate'].upper() == 'DOES NOT CONTAIN':
-        q = s.query(Message).filter(
-            not_(Message.sender.contains(rule['value']))
+        q = session.query(EMail).filter(
+            not_(EMail.sender.contains(rule['value']))
         )
     return q
 
@@ -82,30 +82,29 @@ def subject_filter(session, rule):
         - rule: rule dictionary for this field
     """
     if rule['predicate'].upper() == 'EQUAL':
-        q = s.query(Message).filter(
-            Message.subject==rule['value']
+        q = session.query(EMail).filter(
+            EMail.subject==rule['value']
         )
     elif rule['predicate'].upper() == 'CONTAINS':
-        q = s.query(Message).filter(
-            Message.subject.contains(rule['value'])
+        q = session.query(EMail).filter(
+            EMail.subject.contains(rule['value'])
         )
     elif rule['predicate'].upper() == 'NOT EQUAL':
-        q = s.query(Message).filter(
-            Message.subject!=rule['value']
+        q = session.query(EMail).filter(
+            EMail.subject!=rule['value']
         )
     elif rule['predicate'].upper() == 'DOES NOT CONTAIN':
-        q = s.query(Message).filter(
-            not_(Message.subject.contains(rule['value']))
+        q = session.query(EMail).filter(
+            not_(EMail.subject.contains(rule['value']))
         )
     return q
 
 
 def filter_controller(rule):
-    for rule in rules['rules']:
-        if rule['field'].upper() == 'FROM':
-            q = sender_filter(session, rule)
-        elif rule['field'].upper() == 'SUBJECT':
-            q = subject_filter(session, rule)
-        elif rule['field'].upper() == 'DATE':
-            q = date_filter(session, rule)
+    if rule['field'].upper() == 'FROM':
+        q = recipient_filter(rule=rule)
+    elif rule['field'].upper() == 'SUBJECT':
+        q = subject_filter(rule=rule)
+    elif rule['field'].upper() == 'DATE':
+        q = date_filter(rule=rule)
     return q
